@@ -41,7 +41,6 @@ template<class T> class Image
 typedef Image<double> BwImage;
 
 //function declarations
-double gamma(double x);
 void AGGDfit(IplImage* structdis, double& lsigma_best, double& rsigma_best, double& gamma_best);
 void ComputeBrisqueFeature(IplImage *orig, vector<double>& featurevector);
 

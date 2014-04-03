@@ -16,7 +16,7 @@ void ComputeBrisqueFeature(IplImage *orig, vector<double>& featurevector)
     for (int itr_scale = 1; itr_scale<=scalenum; itr_scale++)
 	{
 		IplImage *imdist_scaled = cvCreateImage(cvSize(orig_bw->width/pow((double)2,itr_scale-1), orig_bw->height/pow((double)2,itr_scale-1)), IPL_DEPTH_64F, 1);
-		cvResize(orig_bw, imdist_scaled); 
+		cvResize(orig_bw, imdist_scaled,CV_INTER_CUBIC); 
 		
 		//compute mu and mu squared
 		IplImage* mu = cvCreateImage(cvGetSize(imdist_scaled), IPL_DEPTH_64F, 1);
@@ -41,7 +41,7 @@ void ComputeBrisqueFeature(IplImage *orig, vector<double>& featurevector)
                 double lsigma_best, rsigma_best, gamma_best;
                 AGGDfit(structdis, lsigma_best, rsigma_best, gamma_best);
 		featurevector.push_back(gamma_best);
-		featurevector.push_back(lsigma_best*lsigma_best + rsigma_best*rsigma_best);
+		featurevector.push_back((lsigma_best*lsigma_best + rsigma_best*rsigma_best)/2);
 		
 		//Compute paired product images
 		int shifts[4][2]={{0,1},{1,0},{1,1},{-1,1}};
@@ -71,8 +71,8 @@ void ComputeBrisqueFeature(IplImage *orig, vector<double>& featurevector)
 			cvMul(structdis, shifted_structdis, shifted_structdis);
 			AGGDfit(shifted_structdis, lsigma_best, rsigma_best, gamma_best);
 		
-			double constant = sqrt(gamma(1/gamma_best))/sqrt(gamma(3/gamma_best));
-			double meanparam = (rsigma_best-lsigma_best)*(gamma(2/gamma_best)/gamma(1/gamma_best))*constant;
+			double constant = sqrt(tgamma(1/gamma_best))/sqrt(tgamma(3/gamma_best));
+			double meanparam = (rsigma_best-lsigma_best)*(tgamma(2/gamma_best)/tgamma(1/gamma_best))*constant;
 			
 			featurevector.push_back(gamma_best);
 			featurevector.push_back(meanparam);
@@ -129,85 +129,16 @@ void AGGDfit(IplImage* structdis, double& lsigma_best, double& rsigma_best, doub
 	
 	double prevgamma = 0;
 	double prevdiff = 1e10;	
-        float sampling = 0.005;
+        float sampling = 0.001;
 	for (float gam=0.2; gam<10; gam+=sampling) //possible to coarsen sampling to quicken the code, with some loss of accuracy
 	{
-		double r_gam = gamma(2/gam)*gamma(2/gam)/(gamma(1/gam)*gamma(3/gam));
+		double r_gam = tgamma(2/gam)*tgamma(2/gam)/(tgamma(1/gam)*tgamma(3/gam));
 		double diff = abs(r_gam-rhatnorm);
 		if(diff> prevdiff) break;
 		prevdiff = diff;
 		prevgamma = gam;
 	}
-	gamma_best = prevgamma;	
-}
-
-double gamma(double x)
-{
-    int i,k,m;
-    double ga,gr,r,z;
-
-    static double g[] = {
-        1.0,
-        0.5772156649015329,
-       -0.6558780715202538,
-       -0.420026350340952e-1,
-        0.1665386113822915,
-       -0.421977345555443e-1,
-       -0.9621971527877e-2,
-        0.7218943246663e-2,
-       -0.11651675918591e-2,
-       -0.2152416741149e-3,
-        0.1280502823882e-3,
-       -0.201348547807e-4,
-       -0.12504934821e-5,
-        0.1133027232e-5,
-       -0.2056338417e-6,
-        0.6116095e-8,
-        0.50020075e-8,
-       -0.11812746e-8,
-        0.1043427e-9,
-        0.77823e-11,
-       -0.36968e-11,
-        0.51e-12,
-       -0.206e-13,
-       -0.54e-14,
-        0.14e-14};
-
-    if (x > 171.0) return 1e308;    // This value is an overflow flag.
-    if (x == (int)x) {
-        if (x > 0.0) {
-            ga = 1.0;               // use factorial
-            for (i=2;i<x;i++) {
-               ga *= i;
-            }
-         }
-         else
-            ga = 1e308;
-     }
-     else {
-        if (fabs(x) > 1.0) {
-            z = fabs(x);
-            m = (int)z;
-            r = 1.0;
-            for (k=1;k<=m;k++) {
-                r *= (z-k);
-            }
-            z -= m;
-        }
-        else
-            z = x;
-        gr = g[24];
-        for (k=23;k>=0;k--) {
-            gr = gr*z+g[k];
-        }
-        ga = 1.0/(gr*z);
-        if (fabs(x) > 1.0) {
-            ga *= r;
-            if (x < 0.0) {
-                ga = -M_PI/(x*ga*sin(M_PI*x));
-            }
-        }
-    }
-    return ga;
+	gamma_best = prevgamma;
+        printf("gamma best is given by %f\n ",gamma_best);	
 }
 

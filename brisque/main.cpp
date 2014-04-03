@@ -1,7 +1,5 @@
-#include <cstdlib>
-#include <iostream>
 #include "brisque.h"
-#include "opencv2/core/core.hpp"
+
 
 using namespace std;
 

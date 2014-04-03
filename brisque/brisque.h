@@ -1,6 +1,7 @@
 #ifndef JD_BRISQUE
 #define JD_BRISQUE
 
+#include<iostream>
 #include <cstdlib>
 #include <math.h>
 #include <cv.h>

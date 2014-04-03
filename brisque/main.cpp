@@ -3,10 +3,6 @@
 #include "brisque.h"
 #include "opencv2/core/core.hpp"
 
-template <typename Type>
-Type printVector(vector<Type> vec);
-
-
 using namespace std;
 
 
@@ -21,7 +17,7 @@ int main(int argc, char** argv) {
 }
 
 template <typename Type>
-Type printVector(vector<Type> vec)
+void  printVector(vector<Type> vec)
 {
     for(int i=0; i<vec.size(); i++)
     {

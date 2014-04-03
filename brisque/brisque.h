@@ -44,4 +44,7 @@ typedef Image<double> BwImage;
 void AGGDfit(IplImage* structdis, double& lsigma_best, double& rsigma_best, double& gamma_best);
 void ComputeBrisqueFeature(IplImage *orig, vector<double>& featurevector);
 
+template<typename Type>
+void printVector(vector<Type> vec);
+
 #endif

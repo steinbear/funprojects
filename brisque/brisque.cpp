@@ -139,6 +139,5 @@ void AGGDfit(IplImage* structdis, double& lsigma_best, double& rsigma_best, doub
 		prevgamma = gam;
 	}
 	gamma_best = prevgamma;
-        printf("gamma best is given by %f\n ",gamma_best);	
 }
 

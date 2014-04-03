@@ -1,27 +1,21 @@
-/* 
- * File:   newmain.cpp
- * Author: dineshjayaraman
- *
- * Created on March 30, 2012, 12:04 PM
- */
-
 #include <cstdlib>
 #include <iostream>
 #include "brisque.h"
+#include "opencv2/core/core.hpp"
 
 template <typename Type>
 Type printVector(vector<Type> vec);
 
 
 using namespace std;
-/*
- * 
- */
+
+
 int main(int argc, char** argv) {
-	IplImage* orig = cvLoadImage(argv[1]);
+    
+    IplImage* orig = cvLoadImage(argv[1]);
     //IplImage* orig = cvLoadImage("success.bmp");
     vector<double> brisqueFeatures;
-    ComputeBrisque(orig, brisqueFeatures);
+    ComputeBrisqueFeature(orig, brisqueFeatures);
     printVector(brisqueFeatures);
     return 0;
 }

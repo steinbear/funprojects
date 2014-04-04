@@ -13,6 +13,11 @@
 using namespace std;
 #define M_PI 3.14159265358979323846
 
+int find_option( int argc, char **argv, const char *option );
+int read_int( int argc, char **argv, const char *option, int default_value );
+char *read_string( int argc, char **argv, const char *option, char *default_value);
+
+
 template<class T> class Image
 {
   private:
@@ -45,7 +50,8 @@ typedef Image<double> BwImage;
 //function declarations
 void AGGDfit(IplImage* structdis, double& lsigma_best, double& rsigma_best, double& gamma_best);
 void ComputeBrisqueFeature(IplImage *orig, vector<double>& featurevector);
-
+void trainModel();
+float computescore(char* imname);
 
 template <typename Type>
 void  printVector(vector<Type> vec)
@@ -69,6 +75,4 @@ void printVectortoFile(char*filename , vector<Type> vec,float score)
 }
 
 
-void trainModel();
-void computescore();
 #endif

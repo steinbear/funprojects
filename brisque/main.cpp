@@ -1,26 +1,50 @@
 #include "brisque.h"
 
-#define TRAIN 1
+int find_option( int argc, char **argv, const char *option )
+{
+    for( int i = 1; i < argc; i++ )
+        if( strcmp( argv[i], option ) == 0 )
+            return i;
+    return -1;
+}
+
+int read_int( int argc, char **argv, const char *option, int default_value )
+{
+    int iplace = find_option( argc, argv, option );
+    if( iplace >= 0 && iplace < argc-1 )
+        return atoi( argv[iplace+1] );
+    return default_value;
+}
+
+char *read_string( int argc, char **argv, const char *option, char *default_value )
+{
+    int iplace = find_option( argc, argv, option );
+    if( iplace >= 0 && iplace < argc-1 )
+        return argv[iplace+1];
+    return default_value;
+}
+
 
 int  main(int argc, char** argv)
 {
-  float qualityscore;
-  bool train = TRAIN;
-  if(!train)
-   trainModel();
-
-  system("libsvm-3.18/svm-scale -l -1 -u 1 -s allrange train.txt > train_scale");
-  system("libsvm-3.18/svm-train  -s 3 -g 0.05 -c 1024 -b 1 -q train_scale allmodel");
   
-  remove("output.txt");
-  remove("test_ind_scaled");
-  computescore(); 
-  system("libsvm-3.18/svm-scale -r allrange test.txt >> test_ind_scaled");
-  system("libsvm-3.18/svm-predict -b 1 test_ind_scaled allmodel output.txt >>dump");
+    if( find_option( argc, argv, "-h" ) >= 0 )
+    {
+        printf( "Options:\n" );
+        printf( "-t <int> to specify if you want to retrain \n" );
+        printf( "-im <filename> to specify the image file  name\n" );
+        return 0;
+    }
+    
+  int istrain    = read_int( argc, argv, "-t",1 );
+  char *filename = read_string( argc, argv, "-im", NULL );
 
-  FILE* fid = fopen("output.txt","r");
-  fscanf(fid,"%f",&qualityscore);
-  fclose(fid);
-  cout<<"quality is"<<qualityscore<<endl; 
 
+  float qualityscore;
+
+  if(!istrain)
+   trainModel();
+  
+  qualityscore = computescore(filename);
+  cout<<"score in main file is given by:"<<qualityscore<<endl;
 }

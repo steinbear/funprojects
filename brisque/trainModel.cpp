@@ -31,13 +31,13 @@ void trainModel(){
     categorylabels.insert(categorylabels.end(),FFNUM,4);
     
     int  iforg[IMAGENUM];
-    fid = fopen("orgs.txt","r");
+    fid = fopen("livedbfiles/orgs.txt","r");
     for(int itr = 0; itr<IMAGENUM;itr++)
     fscanf(fid,"%d",iforg+itr);
     fclose(fid);
     
     float dmosscores[IMAGENUM];
-    fid = fopen("dmos.txt","r");
+    fid = fopen("livedbfiles/dmos.txt","r");
     for(int itr =0; itr<IMAGENUM;itr++)
     fscanf(fid,"%f",dmosscores+itr);
     fclose(fid);
@@ -71,6 +71,11 @@ void trainModel(){
 
     }
     
+   system("libsvm/svm-scale -l -1 -u 1 -s allrange train.txt > train_scale");
+   system("libsvm/svm-train  -s 3 -g 0.05 -c 1024 -b 1 -q train_scale allmodel");
+   
+   remove("train.txt");
+   remove("train_scale");
     
     return 0;
 

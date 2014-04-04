@@ -8,7 +8,7 @@ add_definitions(-DGCC_COMPILER=1)
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 SET(CMAKE_CXX_FLAGS -fpermissive)
 
-add_executable( brisquequality main.cpp trainModel.cpp  test.cpp brisque.cpp)
+add_executable( brisquequality main.cpp trainModel.cpp  computescore.cpp brisque.cpp)
 
 target_link_libraries( brisquequality  ${OpenCV_LIBS} opencv_videostab)
 

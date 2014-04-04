@@ -51,8 +51,6 @@ http://live.ece.utexas.edu/research/quality/BRISQUE_C++release.zip).
 
 ========================================================================
 
-Running on LINUX Terminal 
-
 Input : A test image name
 
 Output: A quality score of the image. The score typically has a value
@@ -63,7 +61,7 @@ Usage:
 ./brisquequality -im "imagename" 
 
 The code also allows you to retrain the model. It can be acheived by setting -t flag to 1.
-We have provided the code to retrain the model using LIVE database. However, after suitable changes to the code, any image quality database with images and corresponding human judgments would work.
+We have provided the code to retrain the model using LIVE database. However, after suitable changes to the code, any image quality database with images and corresponding human judgments can be used for training.
 
 Dependencies: 
 
@@ -71,21 +69,29 @@ Binaries: svm-predict, svm-scale (from LibSVM)
 svm-train (in case of retraining). 
 Provided with release (libsvm folder)
 
+The above binaries are provided for linux. However, we are including the source files as well in the folder. User can generate the binaries depending on their environment.
+
 Packages: cmake, opencv
+
+This link is pretty helpful to install opencv using cmake: http://docs.opencv.org/doc/tutorials/introduction/linux_gcc_cmake/linux_gcc_cmake.html
+CMake makes it easy to port code across LINUX and windows. More information about cmake can be obtained at:http://www.cmake.org/cmake/resources/software.html
 
 Additional files provided with release:
 
 Binaries: brisquequality 
+This binary is provided for LINUX distribution. However, the code can be recompiled on a windows environment to generate a windows executable.
+
 C++ Files:  main.cpp trainModel.cpp  computescore.cpp brisque.cpp (provided with release)
 H Files: brisque.h
 Data Files: range_all, model_all (provided with release)
+
 Test Image Files: testimage1.bmp, testimage2.bmp img3.jpg ( images folder)
 
 If you need to retrain the model, please download the LIVE Image Quality Database from http://live.ece.utexas.edu/research/quality/subjective.htm.
 We are providing the auxiliary data files associated with live database in text format in livedbfiles folder.
 
 
-Note: The code has been written to work on LINUX OS.
+Note: The code has been written to work on LINUX OS. However, with the suggested changes, it can be changed to work with Windows environment as well.
 ========================================================================
 
 Note on training: 
